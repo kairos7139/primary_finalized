@@ -1,0 +1,17 @@
+---
+title: "Jonathan Jelliff"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/jonathan-jelliff/
+    - icon: github
+      text: Github
+      href: https://github.com/kairos7139/primary
+---
+
+This blog's purpose is to share Data Analytics and Data Science projects and to showcase prior analysis and techniques.
+
+![](site-stats-concept-illustration/3515462.jpg)

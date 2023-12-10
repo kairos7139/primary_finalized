@@ -1,0 +1,19 @@
+---
+title: "Jonathan Jelliff's Resume"
+author: "Jonathan Jelliff"
+format: 
+  html:
+    self-contained: true
+editor: visual
+categories: [Resume]
+---
+
+[![Jonathan Jelliff\'s Resume](resume.jpg)](https://www.dropbox.com/scl/fi/43uazo3iy3gyjypnhsdeo/resume.jpg?rlkey=pze5bk7efh0ljgyexw1l6u3yt&dl=0)
+
+[Resume Link](https://www.dropbox.com/scl/fi/43uazo3iy3gyjypnhsdeo/resume.jpg?rlkey=pze5bk7efh0ljgyexw1l6u3yt&dl=0)
+
+Please check out the attacheched hyperlink to advance to my Resume.
+
+Welcome, I would like to introduce myself as an Analyst whom is passionate about all thing Mathematical deep learning into problem solving. I like admire W. Edwards Deming's famous quote that "Without data, you're just another person with an opinion." I believe that as Data Analyst and Data Scientist we have the privilege to go beyond just a mere opinion, in that we have the tools necessary to prove facts. This, in turn, allows us to hopefully use these skills to better the life of our fellow man, as data can be seen in everything and everywhere- whether it is realized or not.
+
+As a U.S. Navy Veteran, I first knew I was inclined to Mathematics and Mechanical structures when I took the ASVAB (Military's I.Q. entrance exam), and I scored the highest on mathematics. the recruiter came back and listed numerous jobs in which I was eligible, and I chose Aviation Structural Mechanics. This involved numerous calculations and the required knowledge of formulas and chemical reactions to calculate load and stress factors, in determining outside variables such as temperature and age had on certain components. After the Navy, I began teaching Mathematics at a High School level, which I enjoyed greatly. During COVID though, as schools were closed, I had some time to research how to pursue my career, and found out that Data Analyst, Data Scientist, and Mathematicians were among the fastest growing careers. So chose to combine my passion for Mathematics with technology to lead me to where I am today. Enjoying greatly the deep challenge of problem solving at a complex level while still maintaing the need to work in a team.
