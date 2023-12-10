@@ -1,0 +1,19 @@
+project:
+  type: website
+website:
+  title: "Advanded Data Analytics and Data Science"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/kairos7139/primary
+      - icon: linkedin
+        href: https://www.linkedin.com/in/jonathan-jelliff/
+      - icon: gMail
+        href: kairos7139@gmail.com
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+editor: visual

@@ -1,0 +1,14 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/Resume/index.html",
+      "/posts/post-with-code/index.html",
+<<<<<<< Updated upstream
+      "/posts/Welcome/index.html"
+=======
+      "/posts/Advanced Data Analysis.  Welcome!/index.html"
+>>>>>>> Stashed changes
+    ]
+  }
+]
