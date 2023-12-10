@@ -1,0 +1,218 @@
+---
+title: "Post With Code"
+author: "Jonathan Jelliff"
+date: "2023-12-06"
+categories: [news, code, analysis]
+image: "profile.jpg"
+---
+
+This is a post a representing Ordinary Least Squares Linear Regression Model using polynomial regression, local regression, step functions, and both regression and smoothing splines.
+
+This was chose due to the level of complexity to showcase a Business Problem of North Carolina's 2004 birth records data, and the analysis of a correlation between the routines and behaviors of pregnant mothers and childbirth outcomes. Numerous factors were measures such as the father and mother's age, maturity status of the mother, length of pregnancy, classification of a premature birth, \# of visits during the pregnancy, marital status, weight stability of mother during pregnancy, gender of the baby, smoking habit of mother, and race of the mother. This was a total of 13 variables. The target variable in the analysis is the weight outcome of the baby during birth.
+
+The study was taken with a total of 1,000 inputs in which all data was gained in North Carolina. Observation with missing data were ommitted from the study- which totalled less than 10%.
+
+The data was prepared and split into 70% training data, and 30% testing data. Furthermore, a correlation analysis and visualization were done in order to determine the variable which had the highest absolute value to the target variable, in this case the child's weight at birth. The variable with the highest correlation was the number of maternity weeks compared to the weight of the infant- which can be seen in the scatter plot demonstrated below. Generally, when maternity weeks were below 27 the weight of the baby was fairly constant at below 3lbs, but entering into the 30th maternity week, the average fetus weight seemed to hit a growth spurt gaining much of its weight up to week 37 in which it plateaus again leading to the constant weight up until birth.
+
+During the analysis the hypothesis was nullified that the mother's age had any significant correlation to the child's weight at birth. The father's weight was compared as well- leading to the same conclusion.
+
+The training data was further analyzed in a leaner model in predicting weights compared to weeks of pregnancy as seen below.
+
+The overall coefficients are as follows.
+
+```         
+##              Estimate Std. Error t value Pr(>|t|)     ## (Intercept) -7.069515   0.581129 -12.165  < 2e-16 *** ## fage         0.014971   0.009724   1.540  0.12413     ## mage         0.010142   0.009666   1.049  0.29445     ## weeks        0.339776   0.014522  23.397  < 2e-16 *** ## visits       0.012027   0.010808   1.113  0.26622     ## gained       0.008512   0.003048   2.793  0.00537 **
+```
+
+This data shows that only weeks of pregnancy and weight gained by the mother had a statistically significant impact unto the child's birth weight. As shows by a P-value of 2e-16, and .00537, which is of very high significance- especially in the case of weeks of pregnancy. The remaining variables represented a P-value above 0.05 with the mother's age being the least significant.
+
+Overall, I would conclude that the data is sound in suitability for testing, with a small amount of limitations. The most significant limitation though, being that the data were all collected within a concentrated area of the country, in that it was only collected in North Carolina. That being considered, other factors could be of significance that were overlooked such as locally economic, environmental, and health accessibility factors that were only pertinent to the North Carolina area. More study would need to be done at a broader region in order to determine if these hypothesis are valid nationwide.
+
+```{r}
+
+library(knitr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(rpart)
+library(rsample)
+library(caret)
+library(mgcv)
+library(finalfit)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+# Run this code chunk without altering it
+# clear the session
+rm(list=ls())
+
+# Data is stored in a csv file, the first row contains the variable names. 
+# we call our data mydata
+mydata<-read.csv ("Data_RLab5.csv", header=TRUE)
+
+# remove lowbirthweight
+mydata<-mydata%>%
+  select(-lowbirthweight)
+
+# Please provide your code for Task 1 in this code chunk
+
+# Please provide your code for Task 1 in this code chunk
+library(ISLR)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(dygraphs)
+library(xts)
+library(purrr)
+library(SmartEDA)
+# Verifying data sctructure and any missing values
+ExpData(data=mydata,type=1)
+ExpData(data=mydata,type=2)
+df<- data.frame(mydata)
+ff_glimpse(mydata)
+str(mydata)
+knitr::kable(head(mydata, n=1))
+#checking missing values
+sapply(mydata, function(x) sum(is.na(x)))
+#replace numerical with median
+glimpse(df)
+df.noNAs <- df %>% mutate(across(where(is.numeric), ~replace_na(., median(., na.rm=TRUE))))
+glimpse(df.noNAs)
+# replace categorial with mode
+Mode <- function(x) {
+    ux <- unique(x)
+    ux[which.max(tabulate(match(x, ux)))]
+}
+
+df.noNAs[is.na(df.noNAs)] <- Mode(df.noNAs)
+ExpData(data=df.noNAs,type=2)
+
+#identify and removal of categorial variables
+
+str(df.noNAs)
+no_cat<- df.noNAs %>% select(-mature, - premie, - marital, - gender, - habit, - whitemom)
+head(no_cat)
+ round(cor(no_cat), digits = 2)
+ # Weeks has the highest correlation in comparison with weight (target variable) at 0.67
+ 
+ #Scatterplot of relationship between weeks and weight 
+ ggplot(data= no_cat, mapping = aes(x = weeks, y = weight))+geom_point()
+ 
+ #generally speaking when weeks are below 27 the weight is fairly consistent in that weight is below 3- with the exception of one outlier.  Then above 27 weeks the correlation is seen very well in that the more weeks accrued the more weight gained until about 37 weeks when the range increases significantly.  The weight at 37 weeks - 40 weeks varies from 3-12 until about 43rd week where the variation is reduced to the weight range of 6-9.  
+ 
+# Please provide your code for Task 2 in this code chunk
+# split the sample by using rsample package
+
+# Split the data into a training set (70%) and a test set (30%)
+set.seed(123456)
+split<- initial_split(no_cat, prop = 0.70, strata = "weight")
+train_data <-training(split)
+test_data<-testing(split)
+dim(train_data)
+dim(test_data)
+
+# Please provide your code for Task 3  in this code chunk
+library(readxl)
+library(GGally)
+library(psych)
+library(mgcv)
+#lm function to estimate
+linearmodel<- lm(weight ~ fage+mage+weeks+visits+gained, data = train_data)
+summary(linearmodel)
+#predict function on test_data
+predicted_weights_ols<- predict(linearmodel, test_data)
+predicted_weights_ols
+#calculating MSPE
+predict(linearmodel, newdata = test_data, interval = "prediction")
+predict.lm(linearmodel, newdata = test_data, interval = "none")
+
+library(ISLR2)
+library(CombMSC)
+
+library(MASS)
+library(glmnet)
+library(foreign)
+library(boot)
+library(MASS)
+library(leaps)
+
+
+model_full<-lm(weight ~ fage+mage+weeks+visits+gained, data = train_data)
+y.train = train_data$weight
+predictors.train = train_data[,-6]
+
+y.test = test_data$weight
+predictors.test = test_data[,-6]
+
+RidgeCV = cv.glmnet(as.matrix(predictors.train), y.train,
+                     family='gaussian', type.measure="mse", alpha=0, nfolds=10)
+
+plot(RidgeCV)
+RidgeCV$lambda
+RidgeCV$cvm
+min(RidgeCV$cvm) 
+RidgeCV$lambda.min
+RidgePredictTest<-predict(RidgeCV,s=RidgeCV$lambda.min,newx=as.matrix(predictors.test))
+MSPE_Ridge_test<-mean((RidgePredictTest-y.test)^2)
+MSPE_linear<-MSPE_Ridge_test
+print(MSPE_linear)
+
+library(stats)
+library(mgcv)
+
+library(ISLR2)
+
+library(splines)
+
+linearmodel<- lm(weight ~ fage+mage+weeks+visits+gained, data = train_data)
+summary(linearmodel)
+
+#test on single variable (weeks)
+model_high = gam(weight ~ s(weeks, bs = "cr", sp=300), data = train_data)
+model_high
+model_low = gam(weight ~ s(weeks, bs = "cr", sp=.00000000000001), data = train_data)
+model_OK = gam(weight ~ s(weeks, bs = "cr"), data = train_data, method = "REML")
+model_OK$sp
+plot(model_high, shade = TRUE)
+plot(model_low, shade = TRUE)
+plot(model_OK, shade = TRUE)
+
+model_lm2 = gam(weight ~ s(fage)+s(mage)+s(weeks)+s(visits)+s(gained), data = train_data, method="REML")
+model_lm2
+#removing 3 variables with 1 estimated degrees of freedom- fage, mage, gained for linear modeling to be included as Parametric Coefficients
+gam_model = gam(weight ~ fage+ mage +s(weeks)+s(visits)+ gained, data = train_data, method="REML")
+# we keep seeks and visits within the smoothing function
+summary(gam_model)
+print(gam_model)
+#predict() function to predict the weight variable in the test_data dataset using gam_model
+predicted_weights_gam<-predict(gam_model, test_data)
+predicted_weights_gam
+
+
+
+MSPE_gam<-mean((predicted_weights_gam-y.test)^2)
+
+print(MSPE_gam)
+
+# Please provide your code for Task 5 in this code chunk
+
+
+
+
+#linear model
+linearmodel
+MSPE_linear
+plot(linearmodel)
+
+
+gam_model
+MSPE_gam
+plot(gam_model)
+
+
+#both the gam model and linear model are very close - 0.083 difference, but the MSPE gam does have the lower Mean Squared prediction error (MSPE), and therefore is the more superior of the models to use in this situation for testing.  
+
+
+
+```
